@@ -18,9 +18,9 @@ node {
     println "JWT_KEY_CRED_ID " + JWT_KEY_CRED_ID
     println "CONNECTED_APP_CONSUMER_KEY " + CONNECTED_APP_CONSUMER_KEY
     def Sec_Txt = "82dc8864-134f-46c4-9494-52655447c4c0"
-    
+    def SK = ${workspace} + "@script"
     stage('Create Scratch Org') {   
-    rc = bat returnStatus: true, script: "${toolbelt}/sfdx force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile '${workspace}/server.key' --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
+    rc = bat returnStatus: true, script: "${toolbelt}/sfdx force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile '${SK}\server.key' --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
   
     //rc = bat returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile server.key --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
     println "rc status " + rc
