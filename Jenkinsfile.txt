@@ -11,9 +11,20 @@ node {
     def CONNECTED_APP_CONSUMER_KEY=env.CONNECTED_APP_CONSUMER_KEY_DH
 
     def toolbelt = tool 'toolbelt'
-    stage('checkout source') {
-        // when running in multi-branch job, one must issue this command
-        checkout scm
-    }
-    sfdx force:auth:jwt:grant --clientid 3MVG9d8..z.hDcPJDZzEXu2D0doy0xwM2f2UQ3eVmV3wTLM6kw93d0rvuzGEOh4U03vehjO7S234MAQGGzOe7 --jwtkeyfile server.key --username vijay.mehtani12@gmail.com --setdefaultdevhubusername
+    
+    stage('Create Scratch Org') {
+
+   rc = sh returnStatus: true, script: "${toolbelt}/sfdx force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
+   if (rc != 0) { error 'hub org authorization failed' }
+
+   // need to pull out assigned username
+   rmsg = sh returnStdout: true, script: "${toolbelt}/sfdx force:org:create --definitionfile config/project-scratch-def.json --json --setdefaultusername"
+   printf rmsg
+   def jsonSlurper = new JsonSlurperClassic()
+   def robj = jsonSlurper.parseText(rmsg)
+   if (robj.status != "ok") { error 'org creation failed: ' + robj.message }
+   SFDC_USERNAME=robj.username
+   robj = null
+ 
+}
 }
