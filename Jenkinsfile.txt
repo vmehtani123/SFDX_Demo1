@@ -13,22 +13,15 @@ node {
     def toolbelt = tool 'toolbelt'
     println "Hello world"
     println "toolbelt " + toolbelt
-    println "HUB_ORG " HUB_ORG
+    println "HUB_ORG " + HUB_ORG
+    println "SFDC_HOST " + SFDC_HOST
+    println "JWT_KEY_CRED_ID " + JWT_KEY_CRED_ID
+    println "CONNECTED_APP_CONSUMER_KEY " + CONNECTED_APP_CONSUMER_KEY
     
     stage('Create Scratch Org') {
 
    rc = sh returnStatus: true, script: "${toolbelt}/sfdx force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${JWT_KEY_CRED_ID} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
-   
-   if (rc != 0) { error 'hub org authorization failed' }
-    
-   // need to pull out assigned username
-   rmsg = sh returnStdout: true, script: "${toolbelt}/sfdx force:org:create --definitionfile config/project-scratch-def.json --json --setdefaultusername"
-   printf rmsg
-   def jsonSlurper = new JsonSlurperClassic()
-   def robj = jsonSlurper.parseText(rmsg)
-   if (robj.status != "ok") { error 'org creation failed: ' + robj.message }
-   SFDC_USERNAME=robj.username
-   robj = null
+   println "rc status " + rc
  
 }
 }
