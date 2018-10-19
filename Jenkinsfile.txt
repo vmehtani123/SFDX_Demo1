@@ -17,8 +17,8 @@ node {
     println "SFDC_HOST " + SFDC_HOST
     println "JWT_KEY_CRED_ID " + JWT_KEY_CRED_ID
     println "CONNECTED_APP_CONSUMER_KEY " + CONNECTED_APP_CONSUMER_KEY
-    
-    withCredentials([file(credentialsId: JWT_KEY_CRED_ID, variable: 'jwt_key_file')]) {
+    def Sec_Txt = "82dc8864-134f-46c4-9494-52655447c4c0"
+    withCredentials([text(credentialsId: Sec_Txt, variable: 'jwt_key_file')]) {
     stage('Create Scratch Org') {   
    rc = bat returnStatus: true, script: "${toolbelt}/sfdx force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
   
