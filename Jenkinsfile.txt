@@ -12,7 +12,7 @@ node {
 
     def toolbelt = tool 'toolbelt'
     println "Hello world"
-    println "toolbelt " toolbelt
+    println "toolbelt " + toolbelt
     println "HUB_ORG " HUB_ORG
     
     stage('Create Scratch Org') {
