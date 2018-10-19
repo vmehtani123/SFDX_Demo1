@@ -12,6 +12,7 @@ node {
 
     def toolbelt = tool 'toolbelt'
     println "Hello world"
+    println $(toolbelt)
     stage('Create Scratch Org') {
 
    rc = sh returnStatus: true, script: "${toolbelt}/sfdx force:auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${JWT_KEY_CRED_ID} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
